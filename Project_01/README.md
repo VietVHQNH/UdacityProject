@@ -29,4 +29,6 @@ There are 1 notebooks available here to showcase work related to the above quest
 
 ## Results<a name="results"></a>
 
-The main findings of the code can be found at the post available [here](https://medium.com/@vietvh.qnh/the-influence-of-education-on-developers-e3a4be401e29).
+The main findings of the code can be found at the post available [here](https://github.com/VietVHQNH/UdacityProject/blob/main/Project01/Project01-Source.ipynb).
+
+The blog post available [here](https://medium.com/@vietvh.qnh/the-influence-of-education-on-developers-e3a4be401e29).
