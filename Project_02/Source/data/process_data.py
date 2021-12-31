@@ -1,12 +1,28 @@
 import sys
-
+import pandas as pd
 
 def load_data(messages_filepath, categories_filepath):
-    pass
+    """
+    Args:
+        messages_filepath   --> str: path to message CSV file
+        categories_filepath --> str: path to categories CSV file
+    Return:
+        Dataframe which is combied data from messages data and categories data
+    """
+    message_df = pd.read_csv(messages_filepath)
+    categorie_df = pd.read_csv(categories_filepath)
+    return pd.merge(message_df, categorie_df, on='id')
 
 
 def clean_data(df):
-    pass
+    """
+    Args:
+        df  --> pandas dataframe 
+    Return:
+        Cleaned dataframe
+    """
+    categorie_df = df['categories'].str.split(";", expand = True)
+
 
 
 def save_data(df, database_filename):
