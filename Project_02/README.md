@@ -1,6 +1,5 @@
 # Disaster Response Pipeline Project
 
-# Write-a-Data-Science-Blog-Post
 A Udacity Data Scientist Nanodegree Project
 
 ### Table of Contents
