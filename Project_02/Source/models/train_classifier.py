@@ -21,7 +21,14 @@ lemma = WordNetLemmatizer()
 
 
 def load_data(database_filepath):
-    # load data from database
+    """
+    Args:
+        database_filepath --> str: path to database file
+    Return:
+        X --> pandas dataframe contain all messages
+        Y --> pandas dataframe contain all categories
+        category_names --> list of name of categories
+    """
     engine = create_engine('sqlite:///{}'.format(database_filepath))
     table_name = os.path.basename(database_filepath).split(".")[0]
     df = pd.read_sql_table(table_name, engine)
@@ -48,6 +55,12 @@ def tokenize(text):
 
 
 def build_model():
+    """
+    Args:
+        None
+    Return:
+        pipeline - Sklearn Pipeline Object with the best found parameters
+    """
     # Calculates a vector of term frequencies
     tfidf = TfidfVectorizer()
     # Define MultiOutputClassifier classification
@@ -64,6 +77,15 @@ def build_model():
 
 
 def evaluate_model(model, X_test, Y_test, category_names):
+    """
+    Args:
+        model --> sklearn model
+        X_test --> test dataset
+        Y_test --> test categories
+        category_names --> list all category names
+    Return:
+        results - Dictionary with f1-score, precision and recall score of each categories in test data
+    """
     Y_pred = model.predict(X_test)
     P, R, F, _ = precision_recall_fscore_support(Y_test, Y_pred)
     results = {}
@@ -78,6 +100,13 @@ def evaluate_model(model, X_test, Y_test, category_names):
 
 
 def save_model(model, model_filepath):
+    """
+    Args:
+        model --> sklearn model
+        model_filepath --> where to save model pickle file
+    Return:
+        None
+    """
     with open(model_filepath, 'wb') as f:
         pickle.dump(model, f)
 
