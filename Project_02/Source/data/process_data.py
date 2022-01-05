@@ -1,5 +1,7 @@
+import os
 import sys
 import pandas as pd
+from sqlalchemy import create_engine
 
 def load_data(messages_filepath, categories_filepath):
     """
@@ -20,13 +22,34 @@ def clean_data(df):
         df  --> pandas dataframe 
     Return:
         Cleaned dataframe
+    """    
+    # Create the copy dataframe
+    dump_df = df.copy()
+    # Splits the categories column into separate
+    categories_df = dump_df['categories'].str.split(";",expand = True)
+    # Get new column names from categories values
+    columns = [x.split("-")[0] for x in categories_df.iloc[0].values]
+    # Change the values in categores dataframe to binary values
+    categories_df = categories_df.applymap(lambda x:0 if x.split("-")[-1]=='0' else 1)
+    # Change comlumns name from 1,..,36 to respective values
+    categories_df.columns = columns
+    # Return concatenate the original dataframe with the new `categories` dataframe and drop the duplicates
+    output = pd.concat([df.drop(['categories'], axis = 1),categories_df], axis = 1)
+    return output.drop_duplicates()
+
+
+
+def save_data(df, database_filepath):
     """
-    categorie_df = df['categories'].str.split(";", expand = True)
-
-
-
-def save_data(df, database_filename):
-    pass  
+    Args:
+        df  --> pandas dataframe 
+        database_filename --> data file name
+    Return:
+        None
+    """
+    engine = create_engine('sqlite:///{}'.format(database_filepath))
+    table_name = os.path.basename(database_filepath).split(".")[0]
+    df.to_sql(table_name, engine, index=False,if_exists='replace')
 
 
 def main():
