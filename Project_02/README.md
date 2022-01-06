@@ -1,6 +1,5 @@
 # Disaster Response Pipeline Project
 
-# Write-a-Data-Science-Blog-Post
 A Udacity Data Scientist Nanodegree Project
 
 ### Table of Contents
@@ -44,6 +43,7 @@ The web app will also display visualizations of the data
     `python run.py`
 
 3. Go to http://0.0.0.0:3001/
+<<<<<<< HEAD
 
 ## Files in the repository <a name="constructure"></a>
 
@@ -68,3 +68,5 @@ The web app will also display visualizations of the data
                 classifier.pkl
                 train_classifier.py
 ```
+=======
+>>>>>>> 3d13fe266144d653fa4ae657edacdf734a682c9f
