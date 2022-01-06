@@ -7,7 +7,7 @@ from nltk.tokenize import word_tokenize
 
 from flask import Flask
 from flask import render_template, request
-from plotly.graph_objs import Bar
+from plotly.graph_objs import Bar, Pie
 from sklearn.externals import joblib
 from sqlalchemy import create_engine
 
@@ -43,8 +43,22 @@ def index():
     values_percents = [df[x].sum() for x in values_names]
     values_names = [" ".join([c.capitalize() for c in x.split("_")]) for x in values_names]
 
+    genre_counts = df.groupby('genre').count()['message']
+    genre_names = list(genre_counts.index)
+
     # create visuals
     graphs = [
+        # FIRST GRAPH
+        {
+            'data': [
+                Pie(labels=genre_names, values=genre_counts,hole=.3
+                )
+            ],
+
+            'layout': {
+                'title': 'Distribution of Message Genres',}
+        },
+        # SECOND GRAPH
         {
             'data': [
                 Bar(
@@ -69,7 +83,7 @@ def index():
                 },
                 "barmode": "relative"
             }
-        }
+        },
     ]
 
     # encode plotly graphs in JSON
