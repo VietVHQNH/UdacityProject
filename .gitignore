@@ -3,3 +3,4 @@
 .vscode
 DogVGG16Data.npz
 DogResnet50Data.npz
+__pycache__
