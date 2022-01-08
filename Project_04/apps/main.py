@@ -32,14 +32,15 @@ class Engine:
 
     def __init__(self):
         self.main_model = Sequential()
-        self.dog_names = open("dog_names.txt",'r', encoding = 'utf8').read().split("\n")
-        self.face_cascade = cv2.CascadeClassifier('haarcascades/haarcascade_frontalface_alt.xml')
+        self.dog_names = open("data/dog_names.txt",'r', encoding = 'utf8').read().split("\n")
+        self.face_cascade = cv2.CascadeClassifier('data/haarcascades/haarcascade_frontalface_alt.xml')
         self.ResNet50_model = ResNet50(weights='imagenet')
         self.model_builder()
 
     def face_detector(self, img_path):
         img = cv2.imread(img_path)
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        print(gray)
         faces = self.face_cascade.detectMultiScale(gray)
         return len(faces) > 0
 
@@ -59,15 +60,17 @@ class Engine:
     def model_builder(self):
         self.main_model.add(GlobalAveragePooling2D(input_shape=(7, 7, 2048)))
         self.main_model.add(Dense(133, activation='softmax'))
-        self.main_model.load_weights('saved_models/weights.best.Resnet50.hdf5')
+        self.main_model.load_weights('data/saved_models/weights.best.Resnet50.hdf5')
 
-    def prediction(self, file_path):
-        if self.dog_detector(file_path) or self.face_detector(file_path):
-            return self.predict_breed(file_path)
+    def run(self, file_path):
+        if self.dog_detector(file_path):
+            return "DOG",self.predict_breed(file_path)
+        elif self.face_detector(file_path):
+            return "HUMAN",self.predict_breed(file_path)
         else:
-            return "This image not have any dog or human."
+            return "Error",None
         
 if __name__ == "__main__":
     engine = Engine()
-    for path in glob("images/*"):
+    for path in glob("data/images/*"):
         print(path, engine.prediction(path))
