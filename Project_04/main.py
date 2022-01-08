@@ -32,8 +32,7 @@ class Engine:
 
     def __init__(self):
         self.main_model = Sequential()
-        self.dog_names = [item[20:-1].split(".")[1].replace("_", " ").title() for item in
-                          sorted(glob("../../../data/dog_images/train/*/"))]
+        self.dog_names = open("dog_names.txt",'r', encoding = 'utf8').read().split("\n")
         self.face_cascade = cv2.CascadeClassifier('haarcascades/haarcascade_frontalface_alt.xml')
         self.ResNet50_model = ResNet50(weights='imagenet')
         self.model_builder()
@@ -58,7 +57,7 @@ class Engine:
         return self.dog_names[np.argmax(predicted_vector)]
 
     def model_builder(self):
-        self.main_model.add(GlobalAveragePooling2D(input_shape=(1, 1, 2048)))
+        self.main_model.add(GlobalAveragePooling2D(input_shape=(7, 7, 2048)))
         self.main_model.add(Dense(133, activation='softmax'))
         self.main_model.load_weights('saved_models/weights.best.Resnet50.hdf5')
 
@@ -67,3 +66,8 @@ class Engine:
             return self.predict_breed(file_path)
         else:
             return "This image not have any dog or human."
+        
+if __name__ == "__main__":
+    engine = Engine()
+    for path in glob("images/*"):
+        print(path, engine.prediction(path))
